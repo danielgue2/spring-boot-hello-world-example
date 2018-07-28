@@ -25,12 +25,20 @@ pipeline {
     post {
         always {
             echo 'This will always run'
+			archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+			// deleteDir() /* clean up our workspace */
         }
         success {
             echo 'This will run only if successful'
+			mail to: 'danielgue2@jtc-ufo.com',
+             subject: "Success: Pipeline: ${currentBuild.fullDisplayName}",
+             body: "Successfully: ${env.BUILD_URL}"
         }
         failure {
             echo 'This will run only if failed'
+			mail to: 'danielgue2@jtc-ufo.com',
+             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+             body: "Something is wrong with ${env.BUILD_URL}"
         }
         unstable {
             echo 'This will run only if the run was marked as unstable'
