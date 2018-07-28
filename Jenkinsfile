@@ -1,23 +1,8 @@
-pipeline {
-	tools {
-		maven 'maven'
-	} 
-    agent any 
-    stages {
-        stage('Compile Stage') { 
-            steps {
-                	sh 'mvn clean compile'
-            }
-        }
-        //stage('Testing Stage') { 
-          //  steps {
-            //    	sh 'mvn test'
-            //}
-        //}
-        stage('Deployment Stage') { 
-            steps {
-                	sh 'mvn deploy'
-            }
+node('docker') {
+    checkout scm
+    stage('Build') {
+        docker.image('maven:3.3.3').inside {
+            sh 'mvn --version'
         }
     }
 }
